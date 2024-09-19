@@ -1,5 +1,5 @@
 import { Link, Navigate, Outlet } from "react-router-dom"
-import { useStateContext } from "../contexts/ContextProvider.jsx"
+import { useStateContext } from "../context/ContextProvider.jsx"
 
 export default function DefaultLayout() {
     const { user, token } = useStateContext()
