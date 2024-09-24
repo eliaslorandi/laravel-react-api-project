@@ -45,8 +45,7 @@ export default function Signup() {
                         {Object.keys(errors).map(key => (
                             <p key={key}>{errors[key][0]}</p>
                         ))}
-                    </div>
-                    }
+                    </div>}
                     <input ref={nameRef} type="text" placeholder="Full Name" />
                     <input ref={emailRef} type="email" placeholder="Email Address" />
                     <input ref={passwordRef} type="password" placeholder="Password" />
