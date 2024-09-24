@@ -5,6 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 
+// php artisan make:request SignupRequest *******************
+
 class SignupRequest extends FormRequest
 {
     /**

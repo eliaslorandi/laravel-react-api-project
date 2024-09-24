@@ -1,53 +1,58 @@
 import { Link } from "react-router-dom";
-import { useRef } from 'react';
-//import {createRef, useState} from "react";
-import axiosClient from "../axios-client";
+import { createRef, useState } from "react";
+import axiosClient from "../axios-client.js";
 import { useStateContext } from "../context/ContextProvider.jsx";
 
 export default function Signup() {
-    const nameRef = useRef();
-    const emailRef = useRef();
-    const passwordRef = useRef();
-    const passwordConfirmationRef = useRef();
+    const nameRef = createRef()
+    const emailRef = createRef()
+    const passwordRef = createRef()
+    const passwordConfirmationRef = createRef()
+    const { setUser, setToken } = useStateContext()
+    const [errors, setErrors] = useState(null)
 
-    const {setUser, setToken} = useStateContext();
-
-    const onSubmit = (ev) => {
+    const onSubmit = ev => {
         ev.preventDefault()
         const payload = {
             name: nameRef.current.value,
             email: emailRef.current.value,
             password: passwordRef.current.value,
-            password_confirmation: passwordConfirmationRef.current.value, //underline por motivos do laravel
+            password_confirmation: passwordConfirmationRef.current.value,
         }
+        //console.log(payload);
         axiosClient.post('/signup', payload)
-            .then(({data}) => {
+            .then(({ data }) => {
                 setUser(data.user)
-                setToken(data.token)
+                setToken(data.token);
+                navigate('/dashboard') // redirecione para a página autenticada
             })
             .catch(err => {
                 const response = err.response;
-                if (response && response.status === 422) { //422 erro de validação
-                    console.log(response.data.errors);
+                if (response && response.status === 422) {
+                    setErrors(response.data.errors)
                 }
             })
+
     }
 
     return (
         <div className="login-signup-form animated fadeInDown">
             <div className="form">
                 <form onSubmit={onSubmit}>
-                    <h1 className="title">
-                        SignUp
-                    </h1>
-                    <input ref={nameRef} placeholder="Full name" />
-                    <input ref={emailRef} type="email" placeholder="Email address" />
+                    <h1 className="title">SignUp</h1>
+                    {/* if */}
+                    {errors && <div className="alert">
+                        {Object.keys(errors).map(key => (
+                            <p key={key}>{errors[key][0]}</p>
+                        ))}
+                    </div>
+                    }
+                    <input ref={nameRef} type="text" placeholder="Full Name" />
+                    <input ref={emailRef} type="email" placeholder="Email Address" />
                     <input ref={passwordRef} type="password" placeholder="Password" />
-                    <input ref={passwordConfirmationRef} type="password" placeholder="Password confirmation" />
+                    <input ref={passwordConfirmationRef} type="password" placeholder="Repeat Password" />
                     <button className="btn btn-block">Signup</button>
-                    <p className="message">
-                        Already registered? <Link to="/login">Sign in</Link>
-                    </p>
+                    <p className="message">Already registered? <Link to="/login">Sign In</Link></p>
                 </form>
             </div>
         </div>
