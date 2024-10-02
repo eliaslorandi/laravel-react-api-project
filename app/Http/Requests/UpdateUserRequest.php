@@ -24,8 +24,8 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:55',
-            'email' => 'required|email|unique:users,email'.$this->id, //ira reclamar do unique email
-            'password' => ['confirmed', Password::min(8)]
+            'email' => 'required|email|unique:users,email,' . $this->route('user')->id, // Substitua o 'id' corretamente
+            'password' => ['nullable', 'confirmed', Password::min(8)] // Permite que a senha seja opcional
         ];
     }
 }
