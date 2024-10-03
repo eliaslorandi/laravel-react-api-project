@@ -5,17 +5,17 @@ import { useStateContext } from "../context/ContextProvider.jsx";
 
 export default function UserForm() {
     const navigate = useNavigate();
-    let { id } = useParams();
+    const { id } = useParams();
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState(null);
+    const { setNotification } = useStateContext()
     const [user, setUser] = useState({
         id: null,
         name: '',
         email: '',
         password: '',
         password_confirmation: ''
-    })
-    const [errors, setErrors] = useState(null)
-    const [loading, setLoading] = useState(false)
-    const { setNotification } = useStateContext()
+    });
 
     if (id) {
         useEffect(() => {
@@ -36,7 +36,6 @@ export default function UserForm() {
         if (user.id) {
             axiosClient.put(`/users/${user.id}`, user)
                 .then(() => {
-                    debugger
                     setNotification('User was successfully updated')
                     navigate('/users')
                 })
